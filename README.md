@@ -6,7 +6,7 @@ http://dun.163.com
 
 ```
 .
-├── TextCheckApiDemo.cs 文本在线检查接口演示
+├── TextCheckApiDemo.cs 文本在线检测接口演示
 ├── TextCallbackDemo.cs　文本离线结果获取接口演示
 ├── ImageCheckApiDemo.cs　图片在线检测接口演示
 └── ImageCallbackDemo.cs 图片离线结果获取接口演示
