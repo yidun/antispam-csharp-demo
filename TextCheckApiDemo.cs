@@ -34,12 +34,7 @@ namespace Com.Netease.Is.Antispam.Demo
             parameters.Add("content", "易盾测试内容！");
             parameters.Add("dataOpType", "1");
             parameters.Add("ip", "123.115.77.137");
-            parameters.Add("dataType", "1");
-            parameters.Add("parentDataId", "334d42e1-112f-4fc7-8fb7-c60542fc2018");
-            parameters.Add("title", "易盾测试标题");
-            parameters.Add("url", "http://www.xx.com/xxx.html");
             parameters.Add("account", "csharp@163.com");
-            parameters.Add("nickname", "没事瞎评论csharp");
             parameters.Add("deviceType", "4");
             parameters.Add("deviceId", "92B1E5AA-4C3D-4565-A8C2-86E297055088");
             parameters.Add("callback", "ebfcad1c-dba1-490c-b4de-e784c2691768");
