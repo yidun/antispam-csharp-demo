@@ -34,6 +34,7 @@ namespace Com.Netease.Is.Antispam.Demo
             parameters.Add("url", "http://xxx.xxx.com/xxxx");
             parameters.Add("dataId", "fbfcad1c-dba1-490c-b4de-e784c2691765");
             parameters.Add("callback", "{\"p\":\"xx\"}");
+			parameters.Add("scFrequency", "5");
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
