@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务视频离线结果获取接口地址 */
-            String apiUrl = "https://api.aq.163.com/v2/video/callback/results";
+            String apiUrl = "https://api.aq.163.com/v3/video/callback/results";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v2");
+            parameters.Add("version", "v3");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -48,21 +48,13 @@ namespace Com.Netease.Is.Antispam.Demo
                     {
                         JObject tmp = (JObject)item;
                         String callback = tmp.GetValue("callback").ToObject<String>();
-                        JObject evidenceObjec = (JObject)tmp.SelectToken("evidence");
-                        JArray labels = (JArray)tmp.SelectToken("labels");
-                        if (labels.Count == 0)
+                        int videoLevel = tmp.GetValue("level").ToObject<Int32>();
+                        if(videoLevel !=0)
                         {
-                            Console.WriteLine(String.Format("正常, callback={0}, 证据信息: {1}", callback, evidenceObjec.ToString()));
-                        }
-                        else
-                        {
-                            foreach (var labelObj in labels)
+                            JArray evidences = (JArray)tmp.SelectToken("evidences");
+                            foreach  (var evidence in evidences)
                             {
-                                JObject tmp2 = (JObject)labelObj;
-                                int label = tmp2.GetValue("label").ToObject<Int32>();
-                                int level = tmp2.GetValue("level").ToObject<Int32>();
-                                double rate = tmp2.GetValue("rate").ToObject<Double>();
-                                Console.WriteLine(String.Format("异常, callback={0}, 分类：{1}, 证据信息：{2}", callback, label, evidenceObjec.ToString()));
+                                Console.WriteLine(evidence.ToString());
                             }
                         }
                     }
