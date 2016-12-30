@@ -63,7 +63,7 @@ namespace Com.Netease.Is.Antispam.Demo
                         int action = tmp.GetValue("action").ToObject<Int32>();
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
                         int status = tmp.GetValue("status").ToObject<Int32>();
-                        String callback = tmp.GetValue("callback").ToObject<String>();
+                        String callback = tmp.GetValue("callback")!=null?tmp.GetValue("callback").ToObject<String>():"";
                         JArray labelArray = (JArray)tmp.SelectToken("labels");
                         if (action == 0)
                         {

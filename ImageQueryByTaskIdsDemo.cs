@@ -53,7 +53,7 @@ namespace Com.Netease.Is.Antispam.Demo
                     foreach (var item in array)
                     {
                         JObject tmp = (JObject)item;
-                        String name = tmp.GetValue("name").ToObject<String>();
+                        String name =tmp.GetValue("name")!=null?tmp.GetValue("name").ToObject<String>():"";
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
                         JArray labels = (JArray)tmp.SelectToken("labels");
                         Console.WriteLine(String.Format("taskId={0}，name={1}，labels：", taskId, name));
