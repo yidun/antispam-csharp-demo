@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务图片在线检测接口地址 */
-            String apiUrl = "https://api.aq.163.com/v2/image/check";
+            String apiUrl = "https://api.aq.163.com/v3/image/check";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v2");
+            parameters.Add("version", "v3");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -44,7 +44,7 @@ namespace Com.Netease.Is.Antispam.Demo
             jarray.Add(image2);
 
             parameters.Add("images", jarray.ToString());
-            parameters.Add("account", "charp@163.com");
+            parameters.Add("account", "csharp@163.com");
             parameters.Add("ip", "123.115.77.137");
 
             // 3.生成签名信息
@@ -66,7 +66,11 @@ namespace Com.Netease.Is.Antispam.Demo
                     {
                         JObject tmp = (JObject)item;
                         String name = tmp.GetValue("name").ToObject<String>();
+                        String taskId = tmp.GetValue("taskId").ToObject<String>();
                         JArray labels = (JArray)tmp.SelectToken("labels");
+                        Console.WriteLine(String.Format("taskId={0}，name={1}，labels：", taskId, name));
+                        int maxLevel = -1;
+                        // 产品需根据自身需求，自行解析处理，本示例只是简单判断分类级别
                         foreach (var lable in labels)
                         {
                             JObject lableData = (JObject)lable;
@@ -74,6 +78,21 @@ namespace Com.Netease.Is.Antispam.Demo
                             int level = lableData.GetValue("level").ToObject<Int32>();
                             double rate = lableData.GetValue("rate").ToObject<Double>();
                             Console.WriteLine(String.Format("label:{0}, level={1}, rate={2}", label, level, rate));
+                            maxLevel = level > maxLevel ? level : maxLevel;
+                        }
+
+                        switch (maxLevel) {
+                            case 0:
+                                Console.WriteLine("#图片机器检测结果：最高等级为\"正常\"\n");
+                                break;
+                            case 1:
+                                 Console.WriteLine("#图片机器检测结果：最高等级为\"嫌疑\"\n");
+                                break;
+                            case 2:
+                                Console.WriteLine("#图片机器检测结果：最高等级为\"确定\"\n");
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }

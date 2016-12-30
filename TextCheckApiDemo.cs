@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务文本在线检测接口地址 */
-            String apiUrl = "https://api.aq.163.com/v2/text/check";
+            String apiUrl = "https://api.aq.163.com/v3/text/check";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,13 +25,13 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v2");
+            parameters.Add("version", "v3");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
             // 2.设置私有参数
             parameters.Add("dataId", "ebfcad1c-dba1-490c-b4de-e784c2691768");
-            parameters.Add("content", "易盾测试内容！");
+            parameters.Add("content", "易盾测试内容");
             parameters.Add("dataOpType", "1");
 			parameters.Add("dataType", "1");
             parameters.Add("ip", "123.115.77.137");
@@ -48,6 +48,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 4.发送HTTP请求
             HttpClient client = Utils.makeHttpClient();
             String result = Utils.doPost(client, apiUrl, parameters, 1000);
+            Console.WriteLine(result);
             if(result != null)
             {
                 JObject ret = JObject.Parse(result);
@@ -56,18 +57,20 @@ namespace Com.Netease.Is.Antispam.Demo
                 if (code == 200)
                 {
                     JObject resultObject = (JObject)ret["result"];
+                    String taskId = resultObject["taskId"].ToObject<String>();
                     int action = resultObject["action"].ToObject<Int32>();
-                    if (action == 1)
+                    JArray labelArray = (JArray)resultObject.SelectToken("labels");
+                    if (action == 0)
                     {
-			             Console.WriteLine("正常内容，通过");
+                        Console.WriteLine(String.Format("taskId={0}，文本机器检测结果：通过", taskId));
+                    }
+                    else if (action == 1)
+                    {
+                        Console.WriteLine(String.Format("taskId={0}，文本机器检测结果：嫌疑，需人工复审，分类信息如下：{1}", taskId, labelArray));
                     }
                     else if (action == 2)
                     {
-			             Console.WriteLine("垃圾内容，删除");
-                    }
-                    else if (action == 3)
-                    {
-			             Console.WriteLine("嫌疑内容");
+                        Console.WriteLine(String.Format("taskId={0}，文本机器检测结果：不通过，分类信息如下：{1}", taskId, labelArray));
                     }
                 }
                 else
