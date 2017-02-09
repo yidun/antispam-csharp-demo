@@ -47,6 +47,11 @@ namespace Com.Netease.Is.Antispam.Demo
                     foreach (var item in array)
                     {
                         JObject tmp = (JObject)item;
+                        int status = tmp.GetValue("status").ToObject<Int32>();
+                        if(status!=0){//异常，异常码定义见官网文档
+                            Console.WriteLine("视频异常，status="+status);
+                            continue;
+                        }
                         String callback = tmp.GetValue("callback").ToObject<String>();
                         int videoLevel = tmp.GetValue("level").ToObject<Int32>();
                         if(videoLevel !=0)
