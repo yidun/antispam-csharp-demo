@@ -32,7 +32,6 @@ namespace Com.Netease.Is.Antispam.Demo
             // 2.设置私有参数
             parameters.Add("dataId", "ebfcad1c-dba1-490c-b4de-e784c2691768");
             parameters.Add("content", "易盾测试内容");
-            parameters.Add("dataOpType", "1");
 			parameters.Add("dataType", "1");
             parameters.Add("ip", "123.115.77.137");
             parameters.Add("account", "csharp@163.com");
