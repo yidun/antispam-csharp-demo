@@ -32,9 +32,9 @@ namespace Com.Netease.Is.Antispam.Demo
             // 2.设置私有参数
             JArray jarray = new JArray();
             JObject image1 = new JObject();
-            image1.Add("name", "http://p1.music.126.net/lEQvXzoC17AFKa6yrf-ldA==/1412872446212751.jpg");
+            image1.Add("name", "http://nos.netease.com/yidun/2-0-0-4038669695e344a4addc546f772e90a5.jpg");
             image1.Add("type", 1);
-            image1.Add("data", "http://p1.music.126.net/lEQvXzoC17AFKa6yrf-ldA==/1412872446212751.jpg");
+            image1.Add("data", "http://nos.netease.com/yidun/2-0-0-4038669695e344a4addc546f772e90a5.jpg");
             jarray.Add(image1);
 
             JObject image2 = new JObject();
