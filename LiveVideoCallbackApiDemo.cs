@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v2");
+            parameters.Add("version", "v2.1");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
