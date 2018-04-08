@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3.1");
+            parameters.Add("version", "v3.2");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -66,9 +66,10 @@ namespace Com.Netease.Is.Antispam.Demo
                     {
                         JObject tmp = (JObject)item;
                         String name = tmp.GetValue("name").ToObject<String>();
+                        int status = tmp.GetValue("status").ToObject<Int32>();
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
                         JArray labels = (JArray)tmp.SelectToken("labels");
-                        Console.WriteLine(String.Format("taskId={0}，name={1}，labels：", taskId, name));
+                        Console.WriteLine(String.Format("taskId={0}，status={1}，name={2}，labels：", taskId, status, name));
                         int maxLevel = -1;
                         // 产品需根据自身需求，自行解析处理，本示例只是简单判断分类级别
                         foreach (var lable in labels)
