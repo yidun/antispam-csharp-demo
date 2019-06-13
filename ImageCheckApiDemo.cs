@@ -44,8 +44,8 @@ namespace Com.Netease.Is.Antispam.Demo
             jarray.Add(image2);
 
             parameters.Add("images", jarray.ToString());
-            parameters.Add("account", "csharp@163.com");
-            parameters.Add("ip", "123.115.77.137");
+            // parameters.Add("account", "csharp@163.com");
+            // parameters.Add("ip", "123.115.77.137");
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
