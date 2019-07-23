@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务图片在线检测接口地址 */
-            String apiUrl = "https://as.dun.163yun.com/v3/image/check";
+            String apiUrl = "https://as.dun.163yun.com/v4/image/check";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,16 +25,16 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3.2");
+            parameters.Add("version", "v4");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
             // 2.设置私有参数
             JArray jarray = new JArray();
             JObject image1 = new JObject();
-            image1.Add("name", "http://nos.netease.com/yidun/2-0-0-4038669695e344a4addc546f772e90a5.jpg");
+            image1.Add("name", "https://nos.netease.com/yidun/2-0-0-a6133509763d4d6eac881a58f1791976.jpg");
             image1.Add("type", 1);
-            image1.Add("data", "http://nos.netease.com/yidun/2-0-0-4038669695e344a4addc546f772e90a5.jpg");
+            image1.Add("data", "https://nos.netease.com/yidun/2-0-0-a6133509763d4d6eac881a58f1791976.jpg");
             jarray.Add(image1);
 
             JObject image2 = new JObject();
@@ -61,16 +61,16 @@ namespace Com.Netease.Is.Antispam.Demo
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
-                    JArray array = (JArray)ret.SelectToken("result");
-                    foreach (var item in array)
+                    JArray antispamArray = (JArray)ret.SelectToken("antispam");
+                    foreach (var item in antispamArray)
                     {
                         JObject tmp = (JObject)item;
                         String name = tmp.GetValue("name").ToObject<String>();
                         int status = tmp.GetValue("status").ToObject<Int32>();
+                        int action = tmp.GetValue("action").ToObject<Int32>();
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
                         JArray labels = (JArray)tmp.SelectToken("labels");
-                        Console.WriteLine(String.Format("taskId={0}，status={1}，name={2}，labels：", taskId, status, name));
-                        int maxLevel = -1;
+                        Console.WriteLine(String.Format("taskId={0}，status={1}，name={2}，action={3}", taskId, status, name, action));
                         // 产品需根据自身需求，自行解析处理，本示例只是简单判断分类级别
                         foreach (var lable in labels)
                         {
@@ -78,11 +78,11 @@ namespace Com.Netease.Is.Antispam.Demo
                             int label = lableData.GetValue("label").ToObject<Int32>();
                             int level = lableData.GetValue("level").ToObject<Int32>();
                             double rate = lableData.GetValue("rate").ToObject<Double>();
+                            // 返回二级分类信息，根据需要解析
+                            JArray subLabels = (JArray)lableData.SelectToken("subLabels");
                             Console.WriteLine(String.Format("label:{0}, level={1}, rate={2}", label, level, rate));
-                            maxLevel = level > maxLevel ? level : maxLevel;
                         }
-
-                        switch (maxLevel) {
+                        switch (action) {
                             case 0:
                                 Console.WriteLine("#图片机器检测结果：最高等级为\"正常\"\n");
                                 break;
@@ -94,6 +94,24 @@ namespace Com.Netease.Is.Antispam.Demo
                                 break;
                             default:
                                 break;
+                        }
+                    }
+                    JArray ocrArray = (JArray)ret.SelectToken("ocr");
+                    foreach (var item in ocrArray)
+                    {
+                        JObject ocr = (JObject)item;
+                        String name = tmp.GetValue("name").ToObject<String>();
+                        String taskId = tmp.GetValue("taskId").ToObject<String>();
+                        JArray details = (JArray)tmp.SelectToken("details");
+                        Console.WriteLine(String.Format("taskId={0}，name={1}", taskId, name));
+                        // 产品需根据自身需求，自行解析处理，本示例只是简单判断分类级别
+                        foreach (var detail in details)
+                        {
+                            JObject ocrDetail = (JObject)detail;
+                            String content = ocrDetail.GetValue("content").ToObject<String>();
+                            // lineContents为ocr片段及坐标信息，根据需要解析
+                            JArray lineContents = (JArray)ocrDetail.SelectToken("lineContents");
+                            Console.WriteLine(String.Format("识别ocr文本内容:{0}", content));
                         }
                     }
                 }
