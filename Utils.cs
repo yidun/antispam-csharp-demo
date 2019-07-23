@@ -40,7 +40,7 @@ namespace Com.Netease.Is.Antispam.Demo
             client.SendAsync(new HttpRequestMessage
             {
                 Method = new HttpMethod("HEAD"),
-                RequestUri = new Uri("https://api.aq.163.com")
+                RequestUri = new Uri("https://as.dun.163yun.com")
             }).Wait();
             return client;
         }

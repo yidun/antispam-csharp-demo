@@ -17,7 +17,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务直播流信息提交接口地址  */
-            String apiUrl = "https://api.aq.163.com/v2/livevideo/submit";
+            String apiUrl = "https://as.dun.163yun.com/v2/livevideo/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -33,8 +33,8 @@ namespace Com.Netease.Is.Antispam.Demo
             // 2.设置私有参数
             parameters.Add("url", "http://xxx.xxx.com/xxxx");
             parameters.Add("dataId", "fbfcad1c-dba1-490c-b4de-e784c2691765");
-            parameters.Add("callback", "{\"p\":\"xx\"}");
-			parameters.Add("scFrequency", "5");
+            // parameters.Add("callback", "{\"p\":\"xx\"}");
+			// parameters.Add("scFrequency", "5");
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);

@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
-    class ImageQueryByTaskIdsDemo
+    class VideoQueryByTaskIdsDemo
     {
-        public static void imageQueryByTaskIds()
+        public static void videoQueryByTaskIds()
         {
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
@@ -15,8 +15,8 @@ namespace Com.Netease.Is.Antispam.Demo
             String secretKey = "your_secret_key";
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
-            /** 易盾反垃圾云服务图片离线检测结果获取接口地址 */
-            String apiUrl = "https://as.dun.163yun.com/v1/image/query/task";
+            /** 易盾反垃圾云服务点播查询检测结果获取接口地址 */
+            String apiUrl = "https://as.dun.163yun.com/v1/video/query/task";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -53,32 +53,40 @@ namespace Com.Netease.Is.Antispam.Demo
                     foreach (var item in array)
                     {
                         JObject tmp = (JObject)item;
-                        String name =tmp.GetValue("name")!=null?tmp.GetValue("name").ToObject<String>():"";
-                        String taskId = tmp.GetValue("taskId").ToObject<String>();
-                        JArray labels = (JArray)tmp.SelectToken("labels");
-                        Console.WriteLine(String.Format("taskId={0}，name={1}，labels：", taskId, name));
-                        int maxLevel = -1;
-                        // 产品需根据自身需求，自行解析处理，本示例只是简单判断分类级别
-                        foreach (var lable in labels)
-                        {
-                            JObject lableData = (JObject)lable;
-                            int label = lableData.GetValue("label").ToObject<Int32>();
-                            int level = lableData.GetValue("level").ToObject<Int32>();
-                            double rate = lableData.GetValue("rate").ToObject<Double>();
-                            Console.WriteLine(String.Format("label:{0}, level={1}, rate={2}", label, level, rate));
-                            maxLevel = level > maxLevel ? level : maxLevel;
+                        int status = tmp.GetValue("status").ToObject<Int32>();
+                        if (status != 0)
+                        {//-1:提交检测失败，0:正常，10：检测中，20：不是7天内数据，30：taskId不存在，110：请求重复，120：参数错误，130：解析错误，140：数据类型错误
+                            Console.WriteLine("获取结果异常，status={0}",status);
+                            continue;
                         }
-
-                        switch (maxLevel)
+                        String taskId = tmp.GetValue("taskId").ToObject<String>();
+                        String callback = tmp.GetValue("callback").ToObject<String>();
+                        int videoLevel  = tmp.GetValue("level").ToObject<Int32>();
+                        if (videoLevel==0)
                         {
-                            case 0:
-                                Console.WriteLine("#图片查询结果：最高等级为\"正常\"\n");
-                                break;
-                            case 2:
-                                Console.WriteLine("#图片查询结果：最高等级为\"确定\"\n");
-                                break;
-                            default:
-                                break;
+                            Console.WriteLine("正常,callback={0}", callback);
+                        }
+                        else if (videoLevel == 1 || videoLevel == 2)
+                        {
+                            JArray evidenceArray = (JArray)tmp.SelectToken("evidences");
+                            foreach (var evidenceElement in evidenceArray)
+                            {
+                                JObject eObject = (JObject)evidenceElement;
+                                long beginTime = eObject.GetValue("beginTime").ToObject<Int64>();
+                                long endTime = eObject.GetValue("endTime").ToObject<Int64>();
+                                Int32 type = eObject.GetValue("type").ToObject<Int32>();
+                                String url = eObject.GetValue("url").ToObject<String>();
+                                JArray labelArray = (JArray)eObject.SelectToken("labels");
+                                foreach (var lable in labelArray)
+                                {
+                                    JObject lableData = (JObject)lable;
+                                    int label = lableData.GetValue("label").ToObject<Int32>();
+                                    int level = lableData.GetValue("level").ToObject<Int32>();
+                                    double rate = lableData.GetValue("rate").ToObject<Double>();
+                                }
+                                Console.WriteLine("{0}, callback={1}, 证据信息：{2}, 证据分类：{03}, ", videoLevel == 1 ? "不确定"
+                                : "确定", callback, eObject, labelArray);
+                            }
                         }
                     }
                 }
