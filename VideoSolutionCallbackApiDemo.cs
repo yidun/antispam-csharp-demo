@@ -32,15 +32,26 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 3.发送HTTP请求
             HttpClient client = Utils.makeHttpClient();
-            String result = Utils.doPost(client, apiUrl, parameters, 10000);
-            if(result != null)
+            String resultResponse = Utils.doPost(client, apiUrl, parameters, 10000);
+            if(resultResponse != null)
             {
-                JObject ret = JObject.Parse(result);
+                JObject ret = JObject.Parse(resultResponse);
                 int code = ret.GetValue("code").ToObject<Int32>();
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
                     JArray array = (JArray)ret.SelectToken("result");
+                    foreach (var item in array)
+                    {
+                        JObject tmp = (JObject)item;
+                        String callback = tmp.GetValue("callback").ToObject<String>();
+                        String taskId = tmp.GetValue("taskId").ToObject<String>();
+                        String dataId = tmp.GetValue("dataId").ToObject<String>();
+                        // 证据信息
+                        JObject evidences = (JObject)tmp.SelectToken("evidences");
+                        int result = tmp.GetValue("result").ToObject<Int32>();
+                        Console.WriteLine(String.Format("音视频解决方案结果：taskId={0}：dataId={1}：result={2}：callback={3}", taskId, dataId, result, callback));
+                    }
                 }
                 else
                 {

@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v1");
+            parameters.Add("version", "v1.1");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -47,13 +47,23 @@ namespace Com.Netease.Is.Antispam.Demo
                     foreach (var item in array)
                     {
                         JObject jObject = (JObject)item;
-                        int action = jObject.GetValue("action").ToObject<Int32>();
+                        int asrStatus = jObject.GetValue("asrStatus").ToObject<Int32>();
                         String taskId = jObject.GetValue("taskId").ToObject<String>();
-                        JArray labelArray = (JArray)jObject.SelectToken("segments");
-                        if (action == 0) {
-                            Console.WriteLine(String.Format("结果：通过!taskId={0}", taskId));
-                        } else if (action == 2) {
-                            Console.WriteLine(String.Format("结果：不通过!taskId={0}", taskId));
+                        if (asrStatus == 4)
+                        {
+                            int asrResult = jObject.GetValue("asrResult").ToObject<Int32>();
+                            Console.WriteLine(String.Format("检测失败: taskId={0}, asrResult={1}", taskId, asrResult));
+                        }
+                        else
+                        {
+                            int action = jObject.GetValue("action").ToObject<Int32>();
+                            // 证据信息
+                            JArray segmentArray = (JArray)jObject.SelectToken("segments");
+                            if (action == 0) {
+                                Console.WriteLine(String.Format("结果：通过!taskId={0}", taskId));
+                            } else if (action == 1 || action == 2) {
+                                Console.WriteLine(String.format("taskId={0}，结果：{1}", taskId, action == 1 ? "不确定" : "不通过"));
+                            }
                         }
                     }
                 }
