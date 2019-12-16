@@ -30,5 +30,7 @@ https://as.dun.163yun.com
 ├── ImageSubmitApiDemo.cs 图片数据抄送接口演示
 ├── LiveVideoSubmitApiDemo.cs　直播流信息提交接口演示
 └── LiveVideoCallbackApiDemo.cs 直播流检测结果获取接口演示
+├── LiveWallSubmitApiDemo.cs　直播电视墙信息提交接口演示
+└── LiveWallCallbackApiDemo.cs 直播电视墙检测结果获取接口演示
 └── Utils.cs 一些通用的功能函数
 ```
