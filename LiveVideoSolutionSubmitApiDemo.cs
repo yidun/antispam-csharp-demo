@@ -5,19 +5,16 @@ using System.Net.Http;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
-    class AudioSubmitApiDemo
+    class LiveVideoSolutionSubmitApiDemo
     {
-
-        public static void audioSubmit()
+        public static void liveVideoSubmit()
         {     
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
             String secretKey = "your_secret_key";
-            /** 业务ID，易盾根据产品业务特点分配 */
-            String businessId = "your_business_id";
-            /** 易盾反垃圾云服务音频信息提交接口地址  */
-            String apiUrl = "https://as.dun.163yun.com/v1/audio/query/task";
+            /** 易盾反垃圾直播音视频解决方案在线检测接口地址  */
+            String apiUrl = "https://as.dun.163yun.com/v1/livewallsolution/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,14 +22,13 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
-            parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3.1");
+            parameters.Add("version", "v1.0");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
             // 2.设置私有参数
+            parameters.Add("dataId", "ebfcad1c-dba1-490c-b4de-e784c2691768");
             parameters.Add("url", "http://xxx.xxx.com/xxxx");
-
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
             parameters.Add("signature", signature);
@@ -49,11 +45,14 @@ namespace Com.Netease.Is.Antispam.Demo
                 {
                     JObject resultObject = (JObject)ret["result"];
                     String taskId = resultObject["taskId"].ToObject<String>();
-                    int status = resultObject["status"].ToObject<Int32>();
-                    if (status == 0) {
-                        Console.WriteLine(String.Format("推送成功!taskId={0}", taskId));
-                    } else {
-                        Console.WriteLine(String.Format("推送失败!taskId={0}", taskId));
+                    Boolean status = resultObject["status"].ToObject<Boolean>();
+                    if (status)
+                    {
+                        Console.WriteLine(String.format("SUBMIT SUCCESS: taskId={0}", taskId));
+                    }
+                    else
+                    {
+                        Console.WriteLine(String.format("SUBMIT FAIL: taskId={0}", taskId));
                     }
                 }
                 else

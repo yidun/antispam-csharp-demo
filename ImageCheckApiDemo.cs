@@ -96,22 +96,60 @@ namespace Com.Netease.Is.Antispam.Demo
                                 break;
                         }
                     }
+                    // ocr结果
                     JArray ocrArray = (JArray)ret.SelectToken("ocr");
                     foreach (var item in ocrArray)
                     {
                         JObject ocr = (JObject)item;
-                        String name = tmp.GetValue("name").ToObject<String>();
-                        String taskId = tmp.GetValue("taskId").ToObject<String>();
-                        JArray details = (JArray)tmp.SelectToken("details");
+                        String name = ocr.GetValue("name").ToObject<String>();
+                        String taskId = ocr.GetValue("taskId").ToObject<String>();
+                        JArray details = (JArray)ocr.SelectToken("details");
                         Console.WriteLine(String.Format("taskId={0}，name={1}", taskId, name));
-                        // 产品需根据自身需求，自行解析处理，本示例只是简单判断分类级别
                         foreach (var detail in details)
                         {
                             JObject ocrDetail = (JObject)detail;
+                            // 识别ocr文本内容
                             String content = ocrDetail.GetValue("content").ToObject<String>();
-                            // lineContents为ocr片段及坐标信息，根据需要解析
+                            // ocr片段及坐标信息，根据需要解析
                             JArray lineContents = (JArray)ocrDetail.SelectToken("lineContents");
-                            Console.WriteLine(String.Format("识别ocr文本内容:{0}", content));
+                        }
+                    }
+                    // 人脸信息
+                    JArray faceArray = (JArray)ret.SelectToken("face");
+                    foreach (var item in faceArray)
+                    {
+                        JObject face = (JObject)item;
+                        String name = face.GetValue("name").ToObject<String>();
+                        String taskId = face.GetValue("taskId").ToObject<String>();
+                        JArray details = (JArray)face.SelectToken("details");
+                        Console.WriteLine(String.Format("taskId={0}，name={1}", taskId, name));
+                        foreach (var detail in details)
+                        {
+                            JObject faceDetail = (JObject)detail;
+                            // 识别人脸数量
+                            int faceNumber = faceDetail.GetValue("faceNumber").ToObject<Int32>();
+                            // 人物信息及坐标信息
+                            JArray faceContents = (JArray)faceDetail.SelectToken("faceContents");
+                        }
+                    }
+                    // 图片质量信息
+                    JArray qualityArray = (JArray)ret.SelectToken("quality");
+                    foreach (var item in qualityArray)
+                    {
+                        JObject quality = (JObject)item;
+                        String name = quality.GetValue("name").ToObject<String>();
+                        String taskId = quality.GetValue("taskId").ToObject<String>();
+                        JArray details = (JArray)quality.SelectToken("details");
+                        Console.WriteLine(String.Format("taskId={0}，name={1}", taskId, name));
+                        foreach (var detail in details)
+                        {
+                            JObject qualityDetail = (JObject)detail;
+                            // 图片美观度分数
+                            double aestheticsRate = qualityDetail.GetValue("aestheticsRate").ToObject<Double>();
+                            // 图片基本信息
+                            JObject metaInfo = (JObject)qualityDetail.SelectToken("metaInfo");
+                            // 图片边框信息
+                            JObject boarderInfo = (JObject)qualityDetail.SelectToken("boarderInfo");
                         }
                     }
                 }

@@ -22,7 +22,7 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
-            parameters.Add("version", "v1");
+            parameters.Add("version", "v1.1");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -32,15 +32,24 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 3.发送HTTP请求
             HttpClient client = Utils.makeHttpClient();
-            String result = Utils.doPost(client, apiUrl, parameters, 10000);
-            if(result != null)
+            String resultResponse = Utils.doPost(client, apiUrl, parameters, 10000);
+            if(resultResponse != null)
             {
-                JObject ret = JObject.Parse(result);
+                JObject ret = JObject.Parse(resultResponse);
                 int code = ret.GetValue("code").ToObject<Int32>();
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
                     JArray array = (JArray)ret.SelectToken("result");
+                    foreach (var item in array)
+                    {
+                        JObject jObject = (JObject)item;
+                        String taskId = jObject.GetValue("taskId").ToObject<String>();
+                        String dataId = jObject.GetValue("dataId").ToObject<String>();
+                        int result = jObject.GetValue("result").ToObject<Int32>();
+                        // 证据信息
+                        JObject evidences = (JObject) jObject.SelectToken("evidences");
+                    }
                 }
                 else
                 {
