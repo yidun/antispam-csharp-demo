@@ -7,7 +7,7 @@ namespace Com.Netease.Is.Antispam.Demo
 {
     class LiveVideoCallbackApiDemo
     {
-        public static void liveVideotCallBack()
+        public static void liveVideoCallBack()
         {
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
