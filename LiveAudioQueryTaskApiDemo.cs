@@ -5,7 +5,7 @@ using System.Net.Http;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
-    class LiveAudioCallbackApiDemo
+    class LiveAudioQueryTaskApiDemo
     {
         public static void audioCallBack()
         {
@@ -15,8 +15,8 @@ namespace Com.Netease.Is.Antispam.Demo
             String secretKey = "your_secret_key";
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
-            /** 易盾反垃圾云服务直播音频离线结果获取接口地址 */
-            String apiUrl = "https://as-liveaudio.dun.163yun.com/v1/liveaudio/callback/results";
+            /** 调用易盾反垃圾云服务查询直播语音片段离线结果接口API示例 */
+            String apiUrl = "https://as-liveaudio.dun.163yun.com/v1/liveaudio/query/task";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,7 +25,10 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v1.1");
+            parameters.Add("version", "v1.0");
+            parameters.Add("taskId", "xxx");
+            parameters.Add("startTime", "1578326400000");
+            parameters.Add("endTime", "1578327000000");//10min limit
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -49,23 +52,15 @@ namespace Com.Netease.Is.Antispam.Demo
                         JObject jObject = (JObject)item;
                         int asrStatus = jObject.GetValue("asrStatus").ToObject<Int32>();
                         String taskId = jObject.GetValue("taskId").ToObject<String>();
-                        if (asrStatus == 4)
-                        {
-                            int asrResult = jObject.GetValue("asrResult").ToObject<Int32>();
-                            Console.WriteLine(String.Format("检测失败: taskId={0}, asrResult={1}", taskId, asrResult));
-                        }
-                        else
-                        {
-                            int action = jObject.GetValue("action").ToObject<Int32>();
-                            long startTime = jObject.GetValue("startTime").ToObject<Int64>();
-                            long endTime = jObject.GetValue("endTime").ToObject<Int64>();
-                            // 证据信息
-                            JArray segmentArray = (JArray)jObject.SelectToken("segments");
-                            if (action == 0) {
-                                Console.WriteLine(String.Format("结果：通过!taskId={0},startTime={1},endTime={2}", taskId, startTime, endTime));
-                            } else if (action == 1 || action == 2) {
-                                Console.WriteLine(String.format("taskId={0},结果：{1},startTime={2},endTime={3}", taskId, action == 1 ? "不确定" : "不通过", startTime, endTime));
-                            }
+                        int action = jObject.GetValue("action").ToObject<Int32>();
+                        long startTime = jObject.GetValue("startTime").ToObject<Int64>();
+                        long endTime = jObject.GetValue("endTime").ToObject<Int64>();
+                        // 证据信息
+                        JArray segmentArray = (JArray)jObject.SelectToken("segments");
+                        if (action == 0) {
+                            Console.WriteLine(String.Format("结果：通过!taskId={0},startTime={1},endTime={2}", taskId, startTime, endTime));
+                        } else if (action == 1 || action == 2) {
+                            Console.WriteLine(String.format("taskId={0},结果：{1},startTime={2},endTime={3}", taskId, action == 1 ? "不确定" : "不通过", startTime, endTime));
                         }
                     }
                 }
