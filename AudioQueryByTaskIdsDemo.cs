@@ -1,13 +1,13 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
-    class AudioCallbackApiDemo
+    class AudioQueryByTaskIdsDemo
     {
-        public static void audioCallBack()
+        public static void audioQueryByTaskIds()
         {
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
@@ -15,8 +15,8 @@ namespace Com.Netease.Is.Antispam.Demo
             String secretKey = "your_secret_key";
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
-            /** 易盾反垃圾云服务音频离线结果获取接口地址 */
-            String apiUrl = "https://as.dun.163yun.com/v3/audio/callback/results";
+            /** 易盾反垃圾云服务点播音频taskId查询接口地址 */
+            String apiUrl = "https://as.dun.163yun.com/v1/audio/query/task";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,18 +25,24 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3.1");
+            parameters.Add("version", "v1");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
-            // 2.生成签名信息
+            // 2.设置私有参数
+            ISet<String> taskIds = new HashSet<String>();
+            taskIds.Add("3898f9e189404ea98fb20e77d11b69e3");
+            taskIds.Add("3f343b8947a24a6987cba8ef5ea6534f");
+            parameters.Add("taskIds", JArray.FromObject(taskIds).ToString());
+
+            // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
             parameters.Add("signature", signature);
 
-            // 3.发送HTTP请求
+            // 4.发送HTTP请求
             HttpClient client = Utils.makeHttpClient();
             String result = Utils.doPost(client, apiUrl, parameters, 10000);
-            if(result != null)
+            if (result != null)
             {
                 JObject ret = JObject.Parse(result);
                 int code = ret.GetValue("code").ToObject<Int32>();
@@ -46,31 +52,18 @@ namespace Com.Netease.Is.Antispam.Demo
                     JArray array = (JArray)ret.SelectToken("result");
                     foreach (var item in array)
                     {
-                        JObject jObject = (JObject)item;
-                        String taskId = jObject.GetValue("taskId").ToObject<String>();
-                        int asrStatus = jObject.GetValue("asrStatus").ToObject<Int32>();
-                        if (asrStatus == 4)
+                        JObject tmp = (JObject)item;
+                        String taskId = tmp.GetValue("taskId").ToObject<String>();
+                        int action = tmp.GetValue("action").ToObject<Int32>();
+                        // 分类信息
+                        JArray labels = (JArray)tmp.SelectToken("labels");
+                        if (action == 0)
                         {
-                            int asrResult = jObject.GetValue("asrResult").ToObject<Int32>();
-                            Console.WriteLine(String.Format("检测失败: taskId={0}, asrResult={1}", taskId, asrResult));
+                            Console.WriteLine(String.Format("taskId:{0},结果：通过",taskId));
                         }
                         else
                         {
-                            int action = jObject.GetValue("action").ToObject<Int32>();
-                            JArray labelArray = (JArray)jObject.SelectToken("labels");
-                            if (action == 0) {
-                                Console.WriteLine(String.Format("结果：通过!taskId={0}", taskId));
-                            } else if (action == 2 || action == 1) {
-                                /*foreach  (var labelElement in labelArray)
-                                {
-                                    JObject lObject = (JObject)labelElement;
-                                    int label = lObject.GetValue("label").ToObject<Int32>();
-                                    int level = lObject.GetValue("level").ToObject<Int32>();
-                                    JObject detailsObject = (JObject)lObject.SelectToken("details");
-                                    JArray hintArray = (JArray)detailsObject.SelectToken("hint");
-                                }*/
-                                Console.WriteLine(String.Format("结果：{0}!taskId={1}", action == 1 ? "不确定" : "不通过",taskId));
-                            }
+                            Console.WriteLine(String.format("taskId={0}，结果：不通过", taskId));
                         }
                     }
                 }
@@ -83,6 +76,7 @@ namespace Com.Netease.Is.Antispam.Demo
             {
                 Console.WriteLine("Request failed!");
             }
+
         }
     }
 }

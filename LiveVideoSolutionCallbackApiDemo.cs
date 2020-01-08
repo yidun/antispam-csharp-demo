@@ -5,19 +5,16 @@ using System.Net.Http;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
-    class AudioSubmitApiDemo
+    class LiveVideoSolutionCallbackApiDemo
     {
-
-        public static void audioSubmit()
-        {     
+        public static void liveVideoCallBack()
+        {
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
             String secretKey = "your_secret_key";
-            /** 业务ID，易盾根据产品业务特点分配 */
-            String businessId = "your_business_id";
-            /** 易盾反垃圾云服务音频信息提交接口地址  */
-            String apiUrl = "https://as.dun.163yun.com/v3/audio/submit";
+            /** 易盾反垃圾云服务直播音视频解决方案离线结果获取接口地址 */
+            String apiUrl = "https://as.dun.163yun.com/v1/livewallsolution/callback/results";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,35 +22,31 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
-            parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3.1");
+            parameters.Add("version", "v1.0");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
-            // 2.设置私有参数
-            parameters.Add("url", "http://xxx.xxx.com/xxxx");
-
-            // 3.生成签名信息
+            // 2.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
             parameters.Add("signature", signature);
 
-            // 4.发送HTTP请求
+            // 3.发送HTTP请求
             HttpClient client = Utils.makeHttpClient();
-            String result = Utils.doPost(client, apiUrl, parameters, 1000);
-            if(result != null)
+            String resultResponse = Utils.doPost(client, apiUrl, parameters, 10000);
+            if(resultResponse != null)
             {
-                JObject ret = JObject.Parse(result);
+                JObject ret = JObject.Parse(resultResponse);
                 int code = ret.GetValue("code").ToObject<Int32>();
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
-                    JObject resultObject = (JObject)ret["result"];
-                    String taskId = resultObject["taskId"].ToObject<String>();
-                    int status = resultObject["status"].ToObject<Int32>();
-                    if (status == 0) {
-                        Console.WriteLine(String.Format("推送成功!taskId={0}", taskId));
-                    } else {
-                        Console.WriteLine(String.Format("推送失败!taskId={0}", taskId));
+                    JArray array = (JArray)ret.SelectToken("result");
+                    foreach (var item in array)
+                    {
+                        JObject tmp = (JObject)item;
+                        int action = tmp.GetValue("action").ToObject<Int32>();
+                        String taskId = tmp.GetValue("taskId").ToObject<String>();
+                        int label = tmp.GetValue("label").ToObject<Int32>();
                     }
                 }
                 else
@@ -65,7 +58,6 @@ namespace Com.Netease.Is.Antispam.Demo
             {
                 Console.WriteLine("Request failed!");
             }
-
-        }      
+        }
     }
 }

@@ -32,13 +32,13 @@ namespace Com.Netease.Is.Antispam.Demo
             // 2.设置私有参数
             parameters.Add("dataId", "ebfcad1c-dba1-490c-b4de-e784c2691768");
             parameters.Add("content", "易盾测试内容");
-			parameters.Add("dataType", "1");
-            parameters.Add("ip", "123.115.77.137");
-            parameters.Add("account", "csharp@163.com");
-            parameters.Add("deviceType", "4");
-            parameters.Add("deviceId", "92B1E5AA-4C3D-4565-A8C2-86E297055088");
-            parameters.Add("callback", "ebfcad1c-dba1-490c-b4de-e784c2691768");
-            parameters.Add("publishTime", time);
+			// parameters.Add("dataType", "1");
+            // parameters.Add("ip", "123.115.77.137");
+            // parameters.Add("account", "csharp@163.com");
+            // parameters.Add("deviceType", "4");
+            // parameters.Add("deviceId", "92B1E5AA-4C3D-4565-A8C2-86E297055088");
+            // parameters.Add("callback", "ebfcad1c-dba1-490c-b4de-e784c2691768");
+            // parameters.Add("publishTime", time);
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);

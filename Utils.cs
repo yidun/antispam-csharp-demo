@@ -14,8 +14,7 @@ namespace Com.Netease.Is.Antispam.Demo
         // 根据secretKey和parameters生成签名
         public static String genSignature(String secretKey, Dictionary<String, String> parameters)
         {
-            parameters = parameters.OrderBy(o => o.Key).ToDictionary(o => o.Key, p => p.Value);
-
+            parameters = parameters.OrderBy(o => o.Key, StringComparer.Ordinal).ToDictionary(o => o.Key, p => p.Value);
             StringBuilder builder = new StringBuilder();
             foreach (KeyValuePair<String, String> kv in parameters)
             {
