@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务直播电视墙离线结果获取接口地址 */
-            String apiUrl = "https://as.dun.163yun.com/v2/livewall/callback/results";
+            String apiUrl = "http://as.dun.163yun.com/v3/livewall/callback/results";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v2");
+            parameters.Add("version", "v3");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -49,12 +49,12 @@ namespace Com.Netease.Is.Antispam.Demo
                         JObject tmp = (JObject)item;
                         String callback = tmp.GetValue("callback").ToObject<String>();
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
-                        int status = tmp2.GetValue("status").ToObject<Int32>();
-                        int action = tmp2.GetValue("action").ToObject<Int32>();
-                        int label = tmp2.GetValue("label").ToObject<Int32>();
-                        int warnCount = tmp2.GetValue("warnCount").ToObject<Int32>();
-                        String detail = tmp2.GetValue("detail").ToObject<String>();
-                        JArray evidenceObjec = (JArray)tmp.SelectToken("evidence");
+                        int status = tmp.GetValue("status").ToObject<Int32>();
+                        String dataId = tmp.GetValue("dataId").ToObject<String>();
+                        // 机审结果
+                        JObject evidences = (JObject) tmp.SelectToken("evidences");
+                        // 人审结果
+                        JObject reviewEvidences = (JObject) tmp.SelectToken("reviewEvidences");
                     }
                 }
                 else

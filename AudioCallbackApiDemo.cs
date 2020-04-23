@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务音频离线结果获取接口地址 */
-            String apiUrl = "https://as.dun.163yun.com/v3/audio/callback/results";
+            String apiUrl = "http://as.dun.163yun.com/v3/audio/callback/results";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -68,6 +68,8 @@ namespace Com.Netease.Is.Antispam.Demo
                                     int level = lObject.GetValue("level").ToObject<Int32>();
                                     JObject detailsObject = (JObject)lObject.SelectToken("details");
                                     JArray hintArray = (JArray)detailsObject.SelectToken("hint");
+                                    // 二级细分类
+                                    JArray subLabels = (JArray)detailsObject.SelectToken("subLabels");
                                 }*/
                                 Console.WriteLine(String.Format("结果：{0}!taskId={1}", action == 1 ? "不确定" : "不通过",taskId));
                             }
