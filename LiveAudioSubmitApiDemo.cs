@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务直播音频信息提交接口地址  */
-            String apiUrl = "https://as-liveaudio.dun.163yun.com/v1/liveaudio/check";
+            String apiUrl = "http://as-liveaudio.dun.163yun.com/v2/liveaudio/check";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v1.1");
+            parameters.Add("version", "v2");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 

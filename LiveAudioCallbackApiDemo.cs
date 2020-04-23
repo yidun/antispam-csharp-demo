@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务直播音频离线结果获取接口地址 */
-            String apiUrl = "https://as-liveaudio.dun.163yun.com/v1/liveaudio/callback/results";
+            String apiUrl = "http://as-liveaudio.dun.163yun.com/v2/liveaudio/callback/results";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v1.1");
+            parameters.Add("version", "v2");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -47,26 +47,13 @@ namespace Com.Netease.Is.Antispam.Demo
                     foreach (var item in array)
                     {
                         JObject jObject = (JObject)item;
-                        int asrStatus = jObject.GetValue("asrStatus").ToObject<Int32>();
                         String taskId = jObject.GetValue("taskId").ToObject<String>();
-                        if (asrStatus == 4)
-                        {
-                            int asrResult = jObject.GetValue("asrResult").ToObject<Int32>();
-                            Console.WriteLine(String.Format("检测失败: taskId={0}, asrResult={1}", taskId, asrResult));
-                        }
-                        else
-                        {
-                            int action = jObject.GetValue("action").ToObject<Int32>();
-                            long startTime = jObject.GetValue("startTime").ToObject<Int64>();
-                            long endTime = jObject.GetValue("endTime").ToObject<Int64>();
-                            // 证据信息
-                            JArray segmentArray = (JArray)jObject.SelectToken("segments");
-                            if (action == 0) {
-                                Console.WriteLine(String.Format("结果：通过!taskId={0},startTime={1},endTime={2}", taskId, startTime, endTime));
-                            } else if (action == 1 || action == 2) {
-                                Console.WriteLine(String.format("taskId={0},结果：{1},startTime={2},endTime={3}", taskId, action == 1 ? "不确定" : "不通过", startTime, endTime));
-                            }
-                        }
+                        String callback = jObject.GetValue("callback").ToObject<String>();
+                        String dataId = jObject.GetValue("dataId").ToObject<String>();
+                        // 机审结果
+                        JObject evidences = (JObject) jObject.SelectToken("evidences");
+                        // 人审结果
+                        JObject reviewEvidences = (JObject) jObject.SelectToken("reviewEvidences");
                     }
                 }
                 else

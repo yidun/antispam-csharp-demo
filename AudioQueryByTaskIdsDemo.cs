@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务点播音频taskId查询接口地址 */
-            String apiUrl = "https://as.dun.163yun.com/v1/audio/query/task";
+            String apiUrl = "http://as.dun.163yun.com/v3/audio/query/task";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -25,7 +25,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v1");
+            parameters.Add("version", "v3");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -49,23 +49,12 @@ namespace Com.Netease.Is.Antispam.Demo
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
-                    JArray array = (JArray)ret.SelectToken("result");
-                    foreach (var item in array)
-                    {
-                        JObject tmp = (JObject)item;
-                        String taskId = tmp.GetValue("taskId").ToObject<String>();
-                        int action = tmp.GetValue("action").ToObject<Int32>();
-                        // 分类信息
-                        JArray labels = (JArray)tmp.SelectToken("labels");
-                        if (action == 0)
-                        {
-                            Console.WriteLine(String.Format("taskId:{0},结果：通过",taskId));
-                        }
-                        else
-                        {
-                            Console.WriteLine(String.format("taskId={0}，结果：不通过", taskId));
-                        }
-                    }
+                    // 如此垃圾结果
+                    JArray antispamArray = (JArray)ret.SelectToken("antispam");
+                    // 语种检测结果
+                    JArray languageArray = (JArray)ret.SelectToken("language");
+                    // 语音翻译结果
+                    JArray asrArray = (JArray)ret.SelectToken("asr");
                 }
                 else
                 {
