@@ -20,6 +20,8 @@ https://as.dun.163yun.com
 ├── VideoSolutionCallbackApiDemo.cs 点播音视频解决方案离线结果获取接口演示
 ├── LiveVideoSolutionSubmitApiDemo.cs　直播音视频解决方案提交接口演示
 ├── LiveVideoSolutionCallbackApiDemo.cs 直播音视频解决方案离线结果获取接口演示
+├── CrawlerSolutionSubmitApiDemo.cs　网站检测解决方案提交接口演示
+├── CrawlerSolutionCallbackApiDemo.cs 网站检测解决方案离线结果获取接口演示
 ├── TextCheckApiDemo.cs 文本在线检测接口演示
 ├── TextCallbackDemo.cs　文本离线结果获取接口演示
 ├── TextQueryByTaskIdsDemo.cs　文本taskId查询接口演示
@@ -32,6 +34,7 @@ https://as.dun.163yun.com
 └── LiveVideoCallbackApiDemo.cs 直播流检测结果获取接口演示
 ├── LiveWallSubmitApiDemo.cs　直播电视墙信息提交接口演示
 └── LiveWallCallbackApiDemo.cs 直播电视墙检测结果获取接口演示
+└── LiveDataQueryDemo.cs 直播截图查询结果获取接口演示
 └── KeywordSubmitApiDemo.cs 易盾敏感词添加接口演示
 └── ListSubmitApiDemo.cs 易盾名单添加接口演示
 └── Utils.cs 一些通用的功能函数
