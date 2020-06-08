@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
-    class KeywordSubmitApiDemo
+    class KeywordDeleteApiDemo
     {
-        public static void keywordSubmit()
+        public static void keywordDelete()
         {     
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
@@ -15,8 +15,8 @@ namespace Com.Netease.Is.Antispam.Demo
             String businessId = "your_business_id";
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
             String secretKey = "your_secret_key";
-            /** 易盾反垃圾云服务敏感词提交接口地址  */
-            String apiUrl = "http://as.dun.163yun.com/v1/keyword/submit";
+            /** 易盾反垃圾云服务敏感词删除接口地址  */
+            String apiUrl = "http://as.dun.163yun.com/v1/keyword/delete";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -30,12 +30,11 @@ namespace Com.Netease.Is.Antispam.Demo
             parameters.Add("nonce", new Random().Next().ToString());
 
             // 2.设置私有参数
-            // 100: 色情，110: 性感，200: 广告，210: 二维码，300: 暴恐，400: 违禁，500: 涉政，600: 谩骂，700: 灌水
-            parameters.Add("category", "100");
-            List<string> keywords = new List<string>();
-            keywords.Add("色情敏感词1");
-            keywords.Add("色情敏感词2");
-            parameters.Add("keywords", string.Join(",",keywords.ToArray()));
+            List<string> ids = new List<string>();
+            ids.Add("1");
+            ids.Add("2");
+            // 敏感词id参数
+            parameters.Add("ids", string.Join(",",ids.ToArray()));
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
@@ -51,8 +50,7 @@ namespace Com.Netease.Is.Antispam.Demo
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
-                    // 敏感词添加成功结果数组
-                    JArray resultArray = (JArray)ret.SelectToken("result");
+                    Boolean re = ret.GetValue("result").ToObject<Boolean>();
                 }
                 else
                 {

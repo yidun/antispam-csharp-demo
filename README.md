@@ -36,6 +36,7 @@ https://as.dun.163yun.com
 └── LiveWallCallbackApiDemo.cs 直播电视墙检测结果获取接口演示
 └── LiveDataQueryDemo.cs 直播截图查询结果获取接口演示
 └── KeywordSubmitApiDemo.cs 易盾敏感词添加接口演示
+└── KeywordDeleteApiDemo.cs 易盾敏感词删除接口演示
 └── ListSubmitApiDemo.cs 易盾名单添加接口演示
 └── Utils.cs 一些通用的功能函数
 ```
