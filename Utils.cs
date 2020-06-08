@@ -39,7 +39,7 @@ namespace Com.Netease.Is.Antispam.Demo
             client.SendAsync(new HttpRequestMessage
             {
                 Method = new HttpMethod("HEAD"),
-                RequestUri = new Uri("http://as.dun.163yun.com")
+                RequestUri = new Uri("http://as.dun.163.com")
             }).Wait();
             return client;
         }

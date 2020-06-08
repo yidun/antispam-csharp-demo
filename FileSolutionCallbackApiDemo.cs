@@ -14,7 +14,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
             String secretKey = "your_secret_key";
             /** 易盾反垃圾云服务文档解决方案检测结果获取接口地址 */
-            String apiUrl = "http://as-file.dun.163yun.com/v1/file/callback/results";
+            String apiUrl = "http://as-file.dun.163.com/v1/file/callback/results";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
