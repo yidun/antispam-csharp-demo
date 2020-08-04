@@ -57,6 +57,8 @@ namespace Com.Netease.Is.Antispam.Demo
                         else
                         {
                             int action = jObject.GetValue("action").ToObject<Int32>();
+                            // 音频数据所在断句详细信息
+                            JArray segmentsArray = (JArray)jObject.SelectToken("segments");
                             JArray labelArray = (JArray)jObject.SelectToken("labels");
                             if (action == 0) {
                                 Console.WriteLine(String.Format("结果：通过!taskId={0}", taskId));
