@@ -25,6 +25,7 @@ https://dun.163.com
 ├── CrawlerSolutionSubmitApiDemo.cs　网站检测解决方案提交接口演示
 ├── CrawlerSolutionCallbackApiDemo.cs 网站检测解决方案离线结果获取接口演示
 ├── TextCheckApiDemo.cs 文本在线检测接口演示
+├── TextBatchCheckApiDemo.cs 文本批量在线检测接口演示
 ├── TextCallbackDemo.cs　文本离线结果获取接口演示
 ├── TextQueryByTaskIdsDemo.cs　文本taskId查询接口演示
 ├── TextSubmitApiDemo.cs　文本数据抄送接口演示
