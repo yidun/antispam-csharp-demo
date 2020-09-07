@@ -26,7 +26,8 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3.2");
+            // 点播语音版本v3.2及以上二级细分类结构进行调整
+            parameters.Add("version", "v3.3");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
