@@ -25,7 +25,8 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3.2");
+            // 点播语音版本v3.2及以上二级细分类结构进行调整
+            parameters.Add("version", "v3.3");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -68,10 +69,6 @@ namespace Com.Netease.Is.Antispam.Demo
                                     JObject lObject = (JObject)labelElement;
                                     int label = lObject.GetValue("label").ToObject<Int32>();
                                     int level = lObject.GetValue("level").ToObject<Int32>();
-                                    JObject detailsObject = (JObject)lObject.SelectToken("details");
-                                    JArray hintArray = (JArray)detailsObject.SelectToken("hint");
-                                    // 二级细分类
-                                    JArray subLabels = (JArray)detailsObject.SelectToken("subLabels");
                                 }*/
                                 Console.WriteLine(String.Format("结果：{0}!taskId={1}", action == 1 ? "不确定" : "不通过",taskId));
                             }
