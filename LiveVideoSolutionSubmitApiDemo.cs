@@ -48,11 +48,11 @@ namespace Com.Netease.Is.Antispam.Demo
                     Boolean status = resultObject["status"].ToObject<Boolean>();
                     if (status)
                     {
-                        Console.WriteLine(String.format("SUBMIT SUCCESS: taskId={0}", taskId));
+                        Console.WriteLine(String.Format("SUBMIT SUCCESS: taskId={0}", taskId));
                     }
                     else
                     {
-                        Console.WriteLine(String.format("SUBMIT FAIL: taskId={0}", taskId));
+                        Console.WriteLine(String.Format("SUBMIT FAIL: taskId={0}", taskId));
                     }
                 }
                 else

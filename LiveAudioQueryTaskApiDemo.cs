@@ -60,7 +60,7 @@ namespace Com.Netease.Is.Antispam.Demo
                         if (action == 0) {
                             Console.WriteLine(String.Format("结果：通过!taskId={0},startTime={1},endTime={2}", taskId, startTime, endTime));
                         } else if (action == 1 || action == 2) {
-                            Console.WriteLine(String.format("taskId={0},结果：{1},startTime={2},endTime={3}", taskId, action == 1 ? "不确定" : "不通过", startTime, endTime));
+                            Console.WriteLine(String.Format("taskId={0},结果：{1},startTime={2},endTime={3}", taskId, action == 1 ? "不确定" : "不通过", startTime, endTime));
                         }
                     }
                 }

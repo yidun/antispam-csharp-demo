@@ -45,3 +45,4 @@ https://dun.163.com
 ├── MediaSolutionCallbackApiDemo.cs 融媒体解决方案离线结果获取接口演示
 └── Utils.cs 一些通用的功能函数
 ```
+接口都支持SM3加密方法，默认为MD5。如有需要，可参考ImageCheckApiDemo.cs进行指定
