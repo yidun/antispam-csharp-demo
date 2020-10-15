@@ -47,13 +47,14 @@ namespace Com.Netease.Is.Antispam.Demo
             // parameters.Add("account", "csharp@163.com");
             // parameters.Add("ip", "123.115.77.137");
 
-            // 3.生成签名信息
-            String signature = Utils.genSignature(secretKey, parameters);
+            // 3.生成签名信息,指定国密SM3加密
+            parameters.Add("signatureMethod", "SM3");
+            String signature = Utils.genSignature(secretKey, parameters.GetValueOrDefault("signatureMethod", "MD5"), parameters);
             parameters.Add("signature", signature);
 
             // 4.发送HTTP请求
             HttpClient client = Utils.makeHttpClient();
-            String result = Utils.doPost(client, apiUrl, parameters, 1000);
+            String result = Utils.doPost(client, apiUrl, parameters, 10000);
             if(result != null)
             {
                 JObject ret = JObject.Parse(result);

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Utilities.Encoders;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
@@ -30,6 +31,31 @@ namespace Com.Netease.Is.Antispam.Demo
                 builder.Append(b.ToString("x2").ToLower());
             }
             return builder.ToString();
+        }
+
+        // 根据secretKey，signatureMethod和parameters生成签名
+        public static String genSignature(String secretKey, String signatureMethod, Dictionary<String, String> parameters)
+        {
+            if(signatureMethod.ToUpper().Equals("SM3"))
+            {
+                // 国密SM3加密
+                parameters = parameters.OrderBy(o => o.Key, StringComparer.Ordinal).ToDictionary(o => o.Key, p => p.Value);
+                StringBuilder builder = new StringBuilder();
+                foreach (KeyValuePair<String, String> kv in parameters)
+                {
+                    builder.Append(kv.Key).Append(kv.Value);
+                }
+                builder.Append(secretKey);
+                byte[] tmp = Encoding.Default.GetBytes(builder.ToString());
+                byte[] md = new byte[32];
+                SM3Digest sm3 = new SM3Digest();
+                sm3.BlockUpdate(tmp, 0, tmp.Length);
+                sm3.DoFinal(md, 0);
+                return new UTF8Encoding().GetString(Hex.Encode(md));
+            }else
+            {
+                return genSignature(secretKey, parameters);
+            }
         }
 
         public static HttpClient makeHttpClient()
