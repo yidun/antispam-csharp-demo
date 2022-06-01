@@ -7,7 +7,7 @@ namespace demo2020109
     {
         static void Main(string[] args)
         {
-            ImageCheckApiDemo.imageCheck();
+            AudioQueryByTaskIdsDemo.audioQueryByTaskIds();
             Console.WriteLine("Success!");
         }
     }

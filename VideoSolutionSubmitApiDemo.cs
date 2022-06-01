@@ -14,7 +14,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
             String secretKey = "your_secret_key";
             /** 易盾反垃圾点播音视频解决方案在线检测接口地址  */
-            String apiUrl = "http://as.dun.163.com/v1/videosolution/submit";
+            String apiUrl = "http://as.dun.163.com/v2/videosolution/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -22,7 +22,7 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
-            parameters.Add("version", "v1.1");
+            parameters.Add("version", "v2");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -45,7 +45,9 @@ namespace Com.Netease.Is.Antispam.Demo
                 {
                     JObject resultObject = (JObject)ret["result"];
                     String taskId = resultObject["taskId"].ToObject<String>();
-                    String dataId = resultObject["dataId"].ToObject<String>();
+                    String dataId = null == resultObject["dataId"] ? "" : resultObject["dataId"].ToObject<String>();
+                    long dealingCount = resultObject["dealingCount"].ToObject<long>();
+                    Console.WriteLine(String.Format("SUBMIT SUCCESS: taskId={0}, dataId={1}, dealingCount={2}", taskId, dataId, dealingCount));
                 }
                 else
                 {

@@ -17,7 +17,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务直播流信息提交接口地址  */
-            String apiUrl = "http://as.dun.163.com/v3/livevideo/submit";
+            String apiUrl = "http://as.dun.163.com/v4/livevideo/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -26,7 +26,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3");
+            parameters.Add("version", "v4");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -50,9 +50,10 @@ namespace Com.Netease.Is.Antispam.Demo
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
-                    Boolean re = ret.GetValue("result").ToObject<Boolean>();
-                    String taskId = ret.GetValue("taskId").ToObject<String>();
-                    if(re == true)
+                    JObject re = ret.GetValue("result").ToObject<JObject>();
+                    String taskId = re.GetValue("taskId").ToObject<String>();
+                    int status = re.GetValue("status").ToObject<int>();
+                    if(status == 0)
                     {
                         Console.WriteLine(String.Format("推送成功!taskId={0}", taskId));
                     }

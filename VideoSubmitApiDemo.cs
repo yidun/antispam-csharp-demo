@@ -17,7 +17,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务视频信息提交接口地址  */
-            String apiUrl = "http://as.dun.163.com/v3/video/submit";
+            String apiUrl = "http://as.dun.163.com/v4/video/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -26,7 +26,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
-            parameters.Add("version", "v3");
+            parameters.Add("version", "v4");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -52,14 +52,15 @@ namespace Com.Netease.Is.Antispam.Demo
                 {
                     JObject obj = (JObject)ret.SelectToken("result");
                     int status=obj.GetValue("status").ToObject<Int32>();
+                    int dealingCount=obj.GetValue("dealingCount").ToObject<Int32>();
                     String taskId = obj.GetValue("taskId").ToObject<String>();
                     if (status == 0)
                     {
-                        Console.WriteLine("推送成功!taskId={0}", taskId);
+                        Console.WriteLine(String.Format("推送成功!taskId={0}, 缓冲池排队待处理数据量={1}", taskId, dealingCount));
                     }
                     else
                     {
-                        Console.WriteLine("推送失败!taskId={0}", taskId);
+                        Console.WriteLine(String.Format("推送失败!taskId={0}, 缓冲池排队待处理数据量={1}", taskId, dealingCount));
                     }
                     
                 }

@@ -50,11 +50,25 @@ namespace Com.Netease.Is.Antispam.Demo
                         String callback = tmp.GetValue("callback").ToObject<String>();
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
                         int status = tmp.GetValue("status").ToObject<Int32>();
+                        int censorSource = tmp.GetValue("censorSource").ToObject<Int32>();
+                        int callbackStatus = tmp.GetValue("callbackStatus").ToObject<Int32>();
+                        int riskLevel = tmp.GetValue("riskLevel").ToObject<Int32>();
+                        int riskScore = tmp.GetValue("riskScore").ToObject<Int32>();
+                        long duration = tmp.GetValue("duration").ToObject<long>();
                         String dataId = tmp.GetValue("dataId").ToObject<String>();
+                         Console.WriteLine(String.Format("taskId:{0}, dataId:{1}, 回调信息:{2}, 状态:{3}, 审核来源={4}, 回调状态{5}, 风险等级{6}, 风险评分{7}, 时长{8}", taskId, dataId, callback, status, censorSource, callbackStatus, riskLevel, riskScore, duration));
                         // 机审结果
-                        JObject evidences = (JObject) tmp.SelectToken("evidences");
-                        // 人审结果
-                        JObject reviewEvidences = (JObject) tmp.SelectToken("reviewEvidences");
+                        if(null != tmp["evidences"]){
+                            JObject evidences = tmp.GetValue("evidences").ToObject<JObject>();
+                            Console.WriteLine(String.Format("机审信息: {0}", evidences));
+                        }else if(null != tmp["reviewEvidences"]){
+                            JObject reviewEvidences = tmp.GetValue("reviewEvidences").ToObject<JObject>();
+                            Console.WriteLine(String.Format("人审信息: {0}", reviewEvidences));
+                        }else {
+                            Console.WriteLine(String.Format("Invalid Result: {0}", tmp));
+                        }
+                        
+
                     }
                 }
                 else

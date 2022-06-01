@@ -77,5 +77,5 @@ namespace Com.Netease.Is.Antispam.Demo
                 Console.WriteLine("Request failed!");
             }
         }
-}
+    }
 }

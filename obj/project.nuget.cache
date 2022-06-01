@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "dgSpecHash": "+eaodUdHAn9HB/caOYUZ4oKFlQkv8ebHHl0ObwYw3bcWHYZGp/JW5ntP8zYKJrr3O5Mr6gxHup4y9TqHfiHvlg==",
+  "success": true,
+  "projectFilePath": "D:\\github\\antispam-csharp-demo\\antispam-csharp-demo.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\longfan\\.nuget\\packages\\bouncycastle.crypto.dll\\1.8.1\\bouncycastle.crypto.dll.1.8.1.nupkg.sha512",
+    "C:\\Users\\longfan\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'BouncyCastle.Crypto.dll 1.8.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
+      "libraryId": "BouncyCastle.Crypto.dll",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    }
+  ]
+}
