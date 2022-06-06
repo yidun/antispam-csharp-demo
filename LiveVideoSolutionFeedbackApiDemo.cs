@@ -29,7 +29,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // 2.设置私有参数
             JArray jarray = new JArray();
             JObject realTimeInfo = new JObject();
-            realTimeInfo.Add("taskId", "c5ce8cb3888c46868ff5c69cd3a8e00d");
+            realTimeInfo.Add("taskId", "dl7xni7xlpq0z916kk9cprgg04009uji");
             realTimeInfo.Add("status", 100);
             jarray.Add(realTimeInfo);
             parameters.Add("realTimeInfoList", jarray.ToString());
@@ -56,13 +56,13 @@ namespace Com.Netease.Is.Antispam.Demo
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
                         switch (r) {
                             case 0:
-                                Console.WriteLine(String.Format("SUCCESS, taskId={0}" + taskId));
+                                Console.WriteLine(String.Format("SUCCESS, taskId={0}", taskId));
                                 break;
                             case 1:
-                                Console.WriteLine(String.Format("SERVER ERROR, taskId={0}" + taskId));
+                                Console.WriteLine(String.Format("SERVER ERROR, taskId={0}", taskId));
                                 break;
                             case 2:
-                                Console.WriteLine(String.Format("NOT EXISTS, taskId={0}" + taskId));
+                                Console.WriteLine(String.Format("NOT EXISTS, taskId={0}", taskId));
                                 break;
                             default:
                                 break;

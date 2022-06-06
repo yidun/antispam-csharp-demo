@@ -31,11 +31,11 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 2.设置私有参数
             JObject realTimeInfoLis = new JObject();
-            realTimeInfoLis.Add(new JProperty("taskId", "xxx"));
+            realTimeInfoLis.Add(new JProperty("taskId", "${validTaskId}"));
             realTimeInfoLis.Add(new JProperty("status", 100));
             JArray feedbackArray = new JArray();
             feedbackArray.Add(realTimeInfoLis);
-            parameters.Add("realTimeInfoLis",feedbackArray.ToString());
+            parameters.Add("feedbacks",feedbackArray.ToString());
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);

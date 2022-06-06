@@ -7,7 +7,7 @@ namespace demo2020109
     {
         static void Main(string[] args)
         {
-            AudioQueryByTaskIdsDemo.audioQueryByTaskIds();
+            LiveVideoSolutionFeedbackApiDemo.liveVideoFeedback();
             Console.WriteLine("Success!");
         }
     }

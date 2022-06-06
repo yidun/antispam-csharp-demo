@@ -10,11 +10,11 @@ namespace Com.Netease.Is.Antispam.Demo
         public static void audioSubmit()
         {     
             /** 产品密钥ID，产品标识 */
-            String secretId = "your_secret_id";
+            String secretId = "b56fb7240032e49a4a67eaed662c0c7b";
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
-            String secretKey = "your_secret_key";
+            String secretKey = "6e56c27099fde1b88896c0d467cd4ae3";
             /** 业务ID，易盾根据产品业务特点分配 */
-            String businessId = "your_business_id";
+            String businessId = "602f7536ca49781d810a49d72b7cfadc";
             /** 易盾反垃圾云服务直播音频信息提交接口地址  */
             String apiUrl = "http://as.dun.163.com/v3/liveaudio/check";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
@@ -30,7 +30,7 @@ namespace Com.Netease.Is.Antispam.Demo
             parameters.Add("nonce", new Random().Next().ToString());
 
             // 2.设置私有参数
-            parameters.Add("url", "http://xxx.xxx.com/xxxx");
+            parameters.Add("url", "http://xxx.xxx.com/111");
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);

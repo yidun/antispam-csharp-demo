@@ -62,10 +62,10 @@ namespace Com.Netease.Is.Antispam.Demo
                                 Console.WriteLine(String.Format("SUCCESS! taskId={0}", taskId));
                                 break;
                             case 1:
-                                Console.WriteLine(String.Format("SERVER ERROR, taskId={0}" + taskId));
+                                Console.WriteLine(String.Format("SERVER ERROR, taskId={0}", taskId));
                                 break;
                             case 2:
-                                Console.WriteLine(String.Format("NOT EXISTS, taskId={0}" + taskId));
+                                Console.WriteLine(String.Format("NOT EXISTS, taskId={0}", taskId));
                                 break;
                             default:
                                 break;
