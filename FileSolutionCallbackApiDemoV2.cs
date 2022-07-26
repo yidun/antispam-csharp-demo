@@ -52,7 +52,7 @@ namespace Com.Netease.Is.Antispam.Demo
                             String dataId = antispam.GetValue("dataId").ToObject<String>();
                             int result = antispam.GetValue("suggestion").ToObject<Int32>();
                             String callback = null == antispam["callback"] ? "" : antispam.GetValue("callback").ToObject<String>();
-                            JObject evidencesObject = antispam.GetValue("evidences").ToObject<JObject>();
+                            JObject evidencesObject = null == antispam["evidences"] ? null : antispam.GetValue("evidences").ToObject<JObject>();
                              Console.WriteLine(String.Format("SUCCESS: dataId={0}, taskId={1}, result={2}, callback={3}, evidences={4}",dataId, taskId, result, callback, evidencesObject));
                         }
                     }

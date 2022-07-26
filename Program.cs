@@ -7,7 +7,7 @@ namespace demo2020109
     {
         static void Main(string[] args)
         {
-            LiveVideoSolutionFeedbackApiDemo.liveVideoFeedback();
+            VideoSolutionQueryApiDemo.videoSolutionQuery();
             Console.WriteLine("Success!");
         }
     }

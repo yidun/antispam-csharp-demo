@@ -47,18 +47,15 @@ namespace Com.Netease.Is.Antispam.Demo
                     foreach (var item in array)
                     {
                         JObject tmp = (JObject)item;
-                        String taskId = null == tmp["taskId"] ? "" : tmp.GetValue("taskId").ToObject<String>();
-                        String callback = null == tmp["callback"] ? "" : tmp.GetValue("callback").ToObject<String>();
-                        int callbackStatus = null == tmp["callbackStatus"] ? 0 : tmp.GetValue("callbackStatus").ToObject<int>();
-                        int riskLevel = null == tmp["riskLevel"] ? 0 : tmp.GetValue("riskLevel").ToObject<int>();
-                        int riskScore = null == tmp["riskScore"] ? 0 : tmp.GetValue("riskScore").ToObject<int>();
-                        long duration = null == tmp["duration"] ? 0 : tmp.GetValue("duration").ToObject<long>();
-                        Console.WriteLine(String.Format("taskId:{0}, 回调信息:{1}, 回调状态{2}, 风险等级{3}, 风险评分{4}, 时长 {5}", taskId, callback, callbackStatus, riskLevel, riskScore, duration));
-                        JObject evidenceObjec = (JObject)tmp.SelectToken("evidence");
-                        JArray labels = (JArray)tmp.SelectToken("labels");
+                        JObject antispam = tmp.GetValue("antispam").ToObject<JObject>();
+                        String taskId = null == antispam["taskId"] ? "" : antispam.GetValue("taskId").ToObject<String>();
+                        Console.WriteLine(String.Format("taskId:{0}, 反垃圾信息:{1}", taskId, antispam));
+                        String callback = null == antispam["callback"] ? "" : antispam.GetValue("callback").ToObject<String>();
+                        JObject evidenceObjec = (JObject)antispam.SelectToken("evidence");
+                        JArray labels = (JArray)antispam.SelectToken("labels");
                         if (null == labels || labels.Count == 0)
                         {
-                            Console.WriteLine(String.Format("正常, callback={0}, 证据信息: {1}", callback, evidenceObjec.ToString()));
+                            Console.WriteLine(String.Format("正常, callback={0}, 证据信息: {1}", callback, evidenceObjec));
                         }
                         else
                         {
@@ -68,7 +65,7 @@ namespace Com.Netease.Is.Antispam.Demo
                                 int label = tmp2.GetValue("label").ToObject<Int32>();
                                 int level = tmp2.GetValue("level").ToObject<Int32>();
                                 double rate = tmp2.GetValue("rate").ToObject<Double>();
-                                Console.WriteLine(String.Format("异常, callback={0}, 分类：{1}, 证据信息：{2}", callback, label, evidenceObjec.ToString()));
+                                Console.WriteLine(String.Format("异常, callback={0}, 分类：{1}, 证据信息：{2}", callback, label, evidenceObjec));
                             }
                         }
                     }

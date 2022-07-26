@@ -27,7 +27,7 @@ namespace Com.Netease.Is.Antispam.Demo
             parameters.Add("nonce", new Random().Next().ToString());
 
             // 2.设置私有参数
-            parameters.Add("taskId", "95b9496929a647d3be6bee74db639eab");
+            parameters.Add("taskId", "w7hw4q3sv5e9tn6d3xp8dd2g04009vjj");
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
@@ -50,13 +50,6 @@ namespace Com.Netease.Is.Antispam.Demo
                         int status = result.GetValue("status").ToObject<Int32>();                    
                         if(status == 0){
                             JArray records = (JArray)result.SelectToken("records");
-                            foreach (var item in records){
-                                JObject record = (JObject)item;
-                                int label = record.GetValue("label").ToObject<Int32>();
-                                int action = record.GetValue("action").ToObject<Int32>();
-                                long actionTime = record.GetValue("actionTime").ToObject<long>();
-                                String detail = record.GetValue("detail").ToObject<String>();
-                            }
                             Console.WriteLine(String.Format("直播人审结果：{0}", records));
                         }else if(status == 20){
                             Console.WriteLine("taskId is expired");

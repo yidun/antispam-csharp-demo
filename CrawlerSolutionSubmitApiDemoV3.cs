@@ -10,9 +10,9 @@ namespace Com.Netease.Is.Antispam.Demo
         public static void crawlerSolutionSubmit()
         {     
             /** 产品密钥ID，产品标识 */
-            String secretId = "c13768414e6cb63882faddec567e5229";
+            String secretId = "your_secret_id";
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
-            String secretKey = "9df4774905c05eda5dea30f6f9cb3521";
+            String secretKey = "your_secret_key";
             /** 易盾反垃圾网站检测解决方案提交接口地址  */
             String apiUrl = "http://as.dun.163.com/v3/crawler/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();

@@ -64,27 +64,15 @@ namespace Com.Netease.Is.Antispam.Demo
                         }
                         if(null != resultObj["language"]){
                             JObject language = resultObj.GetValue("language").ToObject<JObject>();
-                            String taskId = language.GetValue("taskId").ToObject<String>();
-                            String dataId = null == language["dataId"] ? "" : language.GetValue("dataId").ToObject<String>();
-                            String callback = null == language["callback"] ? "" : language.GetValue("callback").ToObject<String>();
-                            JArray details = (JArray)language.SelectToken("details");
-                            Console.WriteLine(String.Format("语种检测结果：taskId = {0}, dataId = {1}, callback = {2}, 语种检测详情如下: {3}", taskId, dataId, callback, details));
+                            Console.WriteLine(String.Format("语种检测结果 {0}", language));
                         }
                         if(null != resultObj["asr"]){
                             JObject asr = resultObj.GetValue("asr").ToObject<JObject>();
-                            String taskId = asr.GetValue("taskId").ToObject<String>();
-                            String dataId = null == asr["dataId"] ? "" : asr.GetValue("dataId").ToObject<String>();
-                            String callback = null == asr["callback"] ? "" : asr.GetValue("callback").ToObject<String>();
-                            JArray details = (JArray)asr.SelectToken("details");
-                            Console.WriteLine(String.Format("语音识别检测结果：taskId = {0}, dataId = {1}, callback = {2}, 语种检测详情如下: {3}", taskId, dataId, callback, details));
+                            Console.WriteLine(String.Format("语音识别检测结果：{0}", asr));
                         }
                         if(null != resultObj["voice"]){
                             JObject voice = resultObj.GetValue("voice").ToObject<JObject>();
-                            String taskId = voice.GetValue("taskId").ToObject<String>();
-                            String dataId = null == voice["dataId"] ? "" : voice.GetValue("dataId").ToObject<String>();
-                            String callback = null == voice["callback"] ? "" : voice.GetValue("callback").ToObject<String>();
-                            JArray details = (JArray)voice.SelectToken("details");
-                            Console.WriteLine(String.Format("人声检测属性结果：taskId = {0}, dataId = {1}, callback = {2}, 语种检测详情如下: {3}", taskId, dataId, callback, details));
+                            Console.WriteLine(String.Format("人声检测属性结果：{0}", voice));
                         }
                     }
                 }
