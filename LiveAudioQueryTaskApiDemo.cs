@@ -7,7 +7,7 @@ namespace Com.Netease.Is.Antispam.Demo
 {
     class LiveAudioQueryTaskApiDemo
     {
-        public static void audioCallBack()
+        public static void audioQueryTask()
         {
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
@@ -16,7 +16,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 调用易盾反垃圾云服务查询直播语音片段离线结果接口API示例 */
-            String apiUrl = "http://as-liveaudio.dun.163.com/v1/liveaudio/query/task";
+            String apiUrl = "http://as.dun.163.com/v1/liveaudio/query/task";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -53,12 +53,18 @@ namespace Com.Netease.Is.Antispam.Demo
                         int asrStatus = jObject.GetValue("asrStatus").ToObject<Int32>();
                         String taskId = jObject.GetValue("taskId").ToObject<String>();
                         int action = jObject.GetValue("action").ToObject<Int32>();
+                        int asrResult = jObject.GetValue("asrResult").ToObject<Int32>();
+                        String callback = jObject.GetValue("callback").ToObject<String>();
                         long startTime = jObject.GetValue("startTime").ToObject<Int64>();
                         long endTime = jObject.GetValue("endTime").ToObject<Int64>();
+                        int censorSource = jObject.GetValue("censorSource").ToObject<Int32>();
+                        String speakerId = jObject.GetValue("speakerId").ToObject<String>();
+                        String segmentId = jObject.GetValue("segmentId").ToObject<String>();
                         // 证据信息
                         JArray segmentArray = (JArray)jObject.SelectToken("segments");
+                        JArray recordsArray = (JArray)jObject.SelectToken("records");
                         if (action == 0) {
-                            Console.WriteLine(String.Format("结果：通过!taskId={0},startTime={1},endTime={2}", taskId, startTime, endTime));
+                            Console.WriteLine(String.Format("taskId={0}，结果：通过，语音识别状态 {1}，语音识别结果 {2}，回调信息 {3}，时间区间【{4}-{5}】，审核类型 {6}，说话人id {7}，断句id {8}，证据信息如下：{9}, 记录信息如下：{10}",taskId, asrStatus, asrResult, callback, startTime, endTime, censorSource, speakerId, segmentId, segmentArray, recordsArray));
                         } else if (action == 1 || action == 2) {
                             Console.WriteLine(String.Format("taskId={0},结果：{1},startTime={2},endTime={3}", taskId, action == 1 ? "不确定" : "不通过", startTime, endTime));
                         }

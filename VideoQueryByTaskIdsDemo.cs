@@ -31,8 +31,7 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 2.设置私有参数
             ISet<String> taskIds = new HashSet<String>();
-            taskIds.Add("3898f9e189404ea98fb20e77d11b69e3");
-            taskIds.Add("3f343b8947a24a6987cba8ef5ea6534f");
+            taskIds.Add("8956e98380464ebda469382a63860247");
             parameters.Add("taskIds", JArray.FromObject(taskIds).ToString());
 
             // 3.生成签名信息
@@ -56,15 +55,15 @@ namespace Com.Netease.Is.Antispam.Demo
                         int status = tmp.GetValue("status").ToObject<Int32>();
                         if (status != 0)
                         {//-1:提交检测失败，0:正常，10：检测中，20：不是7天内数据，30：taskId不存在，110：请求重复，120：参数错误，130：解析错误，140：数据类型错误
-                            Console.WriteLine("获取结果异常，status={0}",status);
+                            Console.WriteLine(String.Format("获取结果异常，status={0}",status));
                             continue;
                         }
                         String taskId = tmp.GetValue("taskId").ToObject<String>();
-                        String callback = tmp.GetValue("callback").ToObject<String>();
+                        String callback = null == tmp["callback"] ? "" : tmp.GetValue("callback").ToObject<String>();
                         int videoLevel  = tmp.GetValue("level").ToObject<Int32>();
                         if (videoLevel==0)
                         {
-                            Console.WriteLine("正常,callback={0}", callback);
+                            Console.WriteLine(String.Format("正常,callback={0}", callback));
                         }
                         else if (videoLevel == 1 || videoLevel == 2)
                         {
@@ -84,8 +83,8 @@ namespace Com.Netease.Is.Antispam.Demo
                                     int level = lableData.GetValue("level").ToObject<Int32>();
                                     double rate = lableData.GetValue("rate").ToObject<Double>();
                                 }
-                                Console.WriteLine("{0}, callback={1}, 证据信息：{2}, 证据分类：{03}, ", videoLevel == 1 ? "不确定"
-                                : "确定", callback, eObject, labelArray);
+                                Console.WriteLine(String.Format("{0}, callback={1}, 证据信息：{2}, 证据分类：{03}, ", videoLevel == 1 ? "不确定"
+                                : "确定", callback, eObject, labelArray));
                             }
                         }
                     }

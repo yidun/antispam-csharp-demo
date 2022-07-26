@@ -17,7 +17,7 @@ namespace Com.Netease.Is.Antispam.Demo
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
             /** 易盾反垃圾云服务音频信息提交接口地址  */
-            String apiUrl = "http://as.dun.163.com/v3/audio/submit";
+            String apiUrl = "http://as.dun.163.com/v4/audio/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -27,7 +27,7 @@ namespace Com.Netease.Is.Antispam.Demo
             parameters.Add("secretId", secretId);
             parameters.Add("businessId", businessId);
             // 点播语音版本v3.2及以上二级细分类结构进行调整
-            parameters.Add("version", "v3.3");
+            parameters.Add("version", "v4");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
 
@@ -51,10 +51,11 @@ namespace Com.Netease.Is.Antispam.Demo
                     JObject resultObject = (JObject)ret["result"];
                     String taskId = resultObject["taskId"].ToObject<String>();
                     int status = resultObject["status"].ToObject<Int32>();
+                    int dealingCount = resultObject["dealingCount"].ToObject<Int32>();
                     if (status == 0) {
-                        Console.WriteLine(String.Format("推送成功!taskId={0}", taskId));
+                        Console.WriteLine(String.Format("推送成功!taskId={0},dealingCount={1}", taskId, dealingCount));
                     } else {
-                        Console.WriteLine(String.Format("推送失败!taskId={0}", taskId));
+                        Console.WriteLine(String.Format("推送失败!taskId={0},dealingCount={1}", taskId, dealingCount));
                     }
                 }
                 else

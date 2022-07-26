@@ -13,6 +13,8 @@ namespace Com.Netease.Is.Antispam.Demo
             String secretId = "your_secret_id";
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
             String secretKey = "your_secret_key";
+            /** 业务ID，易盾根据产品业务特点分配 */
+            String businessId = "your_business_id";
             /** 易盾反垃圾云服务名单提交接口地址  */
             String apiUrl = "http://as.dun.163.com/v1/list/submit";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
@@ -22,6 +24,7 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 1.设置公共参数
             parameters.Add("secretId", secretId);
+            parameters.Add("businessId", businessId);
             parameters.Add("version", "v1");
             parameters.Add("timestamp", time);
             parameters.Add("nonce", new Random().Next().ToString());
@@ -51,6 +54,7 @@ namespace Com.Netease.Is.Antispam.Demo
                 if (code == 200)
                 {
                     Boolean re = ret.GetValue("result").ToObject<Boolean>();
+                    Console.WriteLine(String.Format("SUCCESS: code={0}, msg={1}, result={2}", code, msg, re));
                 }
                 else
                 {

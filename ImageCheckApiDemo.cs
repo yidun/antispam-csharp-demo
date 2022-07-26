@@ -48,7 +48,7 @@ namespace Com.Netease.Is.Antispam.Demo
             // parameters.Add("ip", "123.115.77.137");
 
             // 3.生成签名信息,指定国密SM3加密
-            parameters.Add("signatureMethod", "SM3");
+            //parameters.Add("signatureMethod", "SM3");
             String signature = Utils.genSignature(secretKey, parameters.GetValueOrDefault("signatureMethod", "MD5"), parameters);
             parameters.Add("signature", signature);
 

@@ -13,7 +13,7 @@ namespace Com.Netease.Is.Antispam.Demo
             String secretId = "your_secret_id";
             /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
             String secretKey = "your_secret_key";
-            /** 易盾反垃圾云服务网站检测解决方案提交接口地址 */
+            /** 易盾反垃圾云服务网站检测解决方案回调接口地址 */
             String apiUrl = "http://as.dun.163.com/v1/crawler/callback/results";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 

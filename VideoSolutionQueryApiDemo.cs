@@ -28,7 +28,7 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 2.设置私有参数
             ISet<String> taskIds = new HashSet<String>();
-            taskIds.Add("3898f9e189404ea98fb20e77d11b69e3");
+            taskIds.Add("0pbhzz3uvnktkya5f2znckqg02009vjj");
             taskIds.Add("3f343b8947a24a6987cba8ef5ea6534f");
             parameters.Add("taskIds", JArray.FromObject(taskIds).ToString());
 
@@ -47,17 +47,7 @@ namespace Com.Netease.Is.Antispam.Demo
                 if (code == 200)
                 {
                     JArray array = (JArray)ret.SelectToken("result");
-                    foreach (var item in array)
-                    {
-                        JObject jObject = (JObject)item;
-                        String taskId = jObject.GetValue("taskId").ToObject<String>();
-                        int status = jObject.GetValue("status").ToObject<Int32>();
-                        int result = jObject.GetValue("result").ToObject<Int32>();
-                        // 证据信息
-                        JObject evidences = (JObject) jObject.SelectToken("evidences");
-                        // 人审证据信息
-                        JObject reviewEvidences = (JObject) jObject.SelectToken("reviewEvidences");
-                    }
+                    Console.WriteLine(String.Format("SUCCESS: code={0}, msg={1}, result={2}", code, msg, array));
                 }
                 else
                 {

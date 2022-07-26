@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
-    class VideoDataQueryDemo
+    class LiveVideoQueryByTaskIdsDemo
     {
-        public static void videoDataQuery()
+        public static void liveVideoQuery()
         {
             /** 产品密钥ID，产品标识 */
             String secretId = "your_secret_id";
@@ -15,8 +15,8 @@ namespace Com.Netease.Is.Antispam.Demo
             String secretKey = "your_secret_key";
             /** 业务ID，易盾根据产品业务特点分配 */
             String businessId = "your_business_id";
-            /** 易盾反垃圾云服务点播截图查询接口地址 */
-            String apiUrl = "http://as.dun.163.com/v1/video/query/image";
+            /** 易盾反垃圾云服务直播音视频解决方案离线结果获取接口地址 */
+            String apiUrl = "http://as.dun.163.com/v1/livevideo/query/task";
             Dictionary<String, String> parameters = new Dictionary<String, String>();
 
             long curr = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -30,15 +30,9 @@ namespace Com.Netease.Is.Antispam.Demo
             parameters.Add("nonce", new Random().Next().ToString());
 
             // 2.设置私有参数
-            parameters.Add("taskId", "c633a8cb6d45497c9f4e7bd6d8218443");
-            // 图片级别：1 嫌疑 2 确定删除
-            parameters.Add("levels", "[1,2]");
-            // 回调状态，1 待回调
-            parameters.Add("callbackStatus", "1");
-            parameters.Add("pageNum", "1");
-            parameters.Add("pageSize", "10");
-            // 详情查看官网VideoDataOderType
-            parameters.Add("orderType", "3");
+            JArray jarray = new JArray();
+            jarray.Add("liz9lagl8ymv3tj0h3537l8g00409r6s");
+            parameters.Add("taskIds", jarray.ToString());
 
             // 3.生成签名信息
             String signature = Utils.genSignature(secretKey, parameters);
@@ -46,21 +40,29 @@ namespace Com.Netease.Is.Antispam.Demo
 
             // 4.发送HTTP请求
             HttpClient client = Utils.makeHttpClient();
-            String result = Utils.doPost(client, apiUrl, parameters, 10000);
-            if (result != null)
+            String resultResponse = Utils.doPost(client, apiUrl, parameters, 10000);
+            if(resultResponse != null)
             {
-                JObject ret = JObject.Parse(result);
+                JObject ret = JObject.Parse(resultResponse);
                 int code = ret.GetValue("code").ToObject<Int32>();
                 String msg = ret.GetValue("msg").ToObject<String>();
                 if (code == 200)
                 {
-                    // 视频状态
-                    int status = ret.GetValue("status").ToObject<Int32>();
-                    JObject images = (JObject)ret.SelectToken("images");
-                    // 截图总数
-                    int count = images.GetValue("count").ToObject<Int32>();
-                    // 截图详情
-                    JArray rows = (JArray)images.SelectToken("rows");
+                    JArray array = (JArray)ret.SelectToken("result");
+                    if(null == array){
+                        Console.WriteLine("没有结果");
+                    }else {
+                        foreach (var item in array)
+                        {
+                            JObject tmp = (JObject)item;
+                            int status = tmp.GetValue("status").ToObject<Int32>();
+                            String taskId = tmp.GetValue("taskId").ToObject<String>();
+                            String callback = null == tmp["callback"] ? "" : tmp.GetValue("callback").ToObject<String>();
+                            int callbackStatus = null == tmp["callback"] ? 0 : tmp.GetValue("callbackStatus").ToObject<int>();
+                            int expireStatus = null == tmp["callback"] ? 0 : tmp.GetValue("expireStatus").ToObject<int>();
+                            Console.WriteLine(String.Format("taskId={0}, status={1}, callback={2}, callbackStatus={3}, expireStatus={4}", taskId, status, callback, callbackStatus, expireStatus));
+                        }
+                    }
                 }
                 else
                 {
@@ -71,7 +73,6 @@ namespace Com.Netease.Is.Antispam.Demo
             {
                 Console.WriteLine("Request failed!");
             }
-
         }
     }
 }
