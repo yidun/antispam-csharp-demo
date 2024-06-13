@@ -8,10 +8,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Com.Netease.Is.Antispam.Demo
 {
+    /** aigc文本流式检测demo */
     class AigcStreamPushAPIDemo
     {
+        /** 产品密钥ID，产品标识 */
         private static readonly string SECRETID = "your_secret_id";
+        /** 产品私有密钥，服务端生成签名信息使用，请严格保管，避免泄露 */
         private static readonly string SECRETKEY = "your_secret_key";
+        /** 易盾反垃圾AIGC文本流式检测地址 */
         private static readonly string API_URL = "https://as.dun.163.com/v1/stream/push";
 
         // Input check demo
