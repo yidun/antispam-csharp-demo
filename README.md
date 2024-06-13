@@ -6,6 +6,8 @@ https://dun.163.com
 
 ```
 .
+├── AigcStreamCheckkV1ApiDemo.cs aigc文本流式检测接口演示
+├── AigcStreamCallbackApiDemo.cs aigc文本流式检测结果获取接口演示
 ├── AudioSubmitApiDemo.cs 点播语音提交接口演示
 ├── AudioCallbackApiDemo.cs　点播语音离线结果获取接口演示
 ├── AudioQueryByTaskIdsDemo.cs　点播语音taskId查询接口演示
