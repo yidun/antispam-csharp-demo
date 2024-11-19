@@ -12,6 +12,28 @@ namespace Com.Netease.Is.Antispam.Demo
 {
     class Utils
     {
+        // 单例 HttpClient 实例
+        private static readonly HttpClient HttpClientInstance;
+
+        static Utils()
+        {
+            // 配置 SocketsHttpHandler 参数
+            SocketsHttpHandler httpHandler = new SocketsHttpHandler
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(10), // 池中的连接最长存活时间
+                PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2), // 池中的连接最大空闲时间
+                MaxConnectionsPerServer = 256 // 每个服务器的最大连接数
+            };
+
+            // 创建单例 HttpClient 实例，并配置默认请求头
+            HttpClientInstance = new HttpClient(httpHandler)
+            {
+                Timeout = TimeSpan.FromMilliseconds(10000) // 设置请求超时时间
+            };
+            HttpClientInstance.DefaultRequestHeaders.Connection.Add("keep-alive");
+        }
+
+
         // 根据secretKey和parameters生成签名
         public static String genSignature(String secretKey, Dictionary<String, String> parameters)
         {
@@ -60,14 +82,12 @@ namespace Com.Netease.Is.Antispam.Demo
 
         public static HttpClient makeHttpClient()
         {
-            HttpClient client = new HttpClient() {};
-            client.DefaultRequestHeaders.Connection.Add("keep-alive");
-            client.SendAsync(new HttpRequestMessage
+            HttpClientInstance.SendAsync(new HttpRequestMessage
             {
                 Method = new HttpMethod("HEAD"),
                 RequestUri = new Uri("http://as.dun.163.com")
             }).Wait();
-            return client;
+            return HttpClientInstance;
         }
 
         // 执行post操作
